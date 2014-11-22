@@ -6,6 +6,7 @@ $(document).ready(function(){
 	populateTable();
 	$('#userList table tbody').on('click', 'td a.linkshowuser', showUserInfo);
 	$('#btnAddUser').on('click', addUser);
+	$('#userList table tbody').on('click', 'td a.linkdeleteuser', deleteUser)
 });
 
 function populateTable(){
@@ -65,3 +66,24 @@ function addUser(event){
 		}
 	});
 };
+
+function deleteUser(event){
+	event.preventDefault();
+	var confirmation = confirm('Are you sure you want to delete this user?');
+	if (confirmation === true){
+		$.ajax({
+			type: 'DELETE',
+			url: '/users/deleteuser/' + $(this).attr('rel')
+		}).done(function(response){
+			if (response.msg === '') {
+			}
+			else {
+				alert('Error: ' + response.msg);
+			}
+			populateTable();
+		});
+	}
+	else {
+		return false;
+	}
+}
